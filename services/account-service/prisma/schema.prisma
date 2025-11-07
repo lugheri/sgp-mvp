@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                Int       @id @default(autoincrement())
+  account_owner     Int
+  account_name      String
+  company_name      String
+  terms_agreed      Int       @db.TinyInt
+  public_ip         String    @default("")
+  local_ip          String    @default("")
+  setup_environment Int
+  active            Int       @db.TinyInt
+  created_at        DateTime  @default(now())
+  updated_at        DateTime? @updatedAt
+
+  @@map("accounts")
+}
