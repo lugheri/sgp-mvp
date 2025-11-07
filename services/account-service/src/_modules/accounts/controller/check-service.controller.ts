@@ -8,7 +8,7 @@ export const checkLive = async (
     reply.status(200).send({
       status: 'online',
       service: 'account-service',
-      version: '5.0.0',
+      version: '1.0.0',
       success: true,
     })
   } catch (err) {

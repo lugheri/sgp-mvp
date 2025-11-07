@@ -7,7 +7,7 @@ export const checkLive = async (
   try {
     reply.status(200).send({
       status: 'online',
-      service: 'account-service',
+      service: 'template-service',
       version: '5.0.0',
       success: true,
     })
