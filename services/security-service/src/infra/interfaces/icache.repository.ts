@@ -12,6 +12,11 @@ export interface ICacheRepository {
     fallback: () => Promise<string>,
     expire?: number,
   ): Promise<string>
+  getOrSetWithNull(
+    key: string,
+    fallback: () => Promise<string | null>,
+    expire?: number,
+  ): Promise<string | null>
   getAndDelete(key: string): Promise<string | null>
   append(key: string, value: string): Promise<number>
 

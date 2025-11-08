@@ -25,8 +25,8 @@ model User {
   access_profile Int
   reset_password Int       @db.TinyInt
   active         Int       @db.TinyInt
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime? @updatedAt @map("updated_at")
+  created_at     DateTime  @default(now()) @map("created_at")
+  updated_at     DateTime? @updatedAt @map("updated_at")
 
   UserInfo      UserInfo?
   AccessProfile AccessProfile? @relation(fields: [access_profile], references: [id])

@@ -1,6 +1,8 @@
-import templatesRoute from '@/_modules/templates/routes/templates.route'
+import userInfoRoute from '@/_modules/users/routes/user-info.route'
+import usersRoute from '@/_modules/users/routes/users.route'
 import { FastifyInstance } from 'fastify'
 
 export const serviceRoutes = async (app: FastifyInstance) => {
-  templatesRoute(app)
+  usersRoute(app)
+  userInfoRoute(app)
 }
