@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// USERS
+enum UserType {
+  operational
+  supervisor
+  manager
+  technical
+  account_manager
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  account_id     Int
+  username       String    @unique
+  password       String
+  user_type      UserType
+  access_profile Int
+  reset_password Int       @db.TinyInt
+  active         Int       @db.TinyInt
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+
+  UserInfo      UserInfo?
+  AccessProfile AccessProfile? @relation(fields: [access_profile], references: [id])
+
+  @@map("users")
+}
+
+model UserInfo {
+  id                Int     @id @default(autoincrement())
+  user_id           Int     @unique
+  name              String
+  email             String
+  number_phone      String
+  is_whatsapp       Int     @db.TinyInt
+  other_phone       String?
+  alternative_email String?
+  user              User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("users_info")
+}
+
+// Access Profile
+model AccessProfile {
+  id          Int    @id @default(autoincrement())
+  account_id  Int
+  name        String
+  description String @db.Text
+  active      Int    @db.TinyInt
+
+  RoleProfile RoleProfile[]
+  users       User[]
+
+  @@map("access_profile")
+}
+
+//Roles
+model Role {
+  id          String @id @default(uuid())
+  name        String
+  description String @db.Text
+  active      Int    @db.TinyInt
+
+  RoleModule  RoleModule[]
+  RoleProfile RoleProfile[]
+
+  @@map("roles")
+}
+
+model RoleProfile {
+  id            Int            @id @default(autoincrement())
+  role_id       String
+  profile_id    Int
+  Role          Role           @relation(fields: [role_id], references: [id])
+  AccessProfile AccessProfile? @relation(fields: [profile_id], references: [id])
+
+  @@map("profile_roles")
+}
+
+model RoleModule {
+  id              Int    @id @default(autoincrement())
+  module_id       Int
+  action_permited String
+  role_id         String
+
+  Role   Role         @relation(fields: [role_id], references: [id])
+  Module SystemModule @relation(fields: [module_id], references: [id])
+
+  @@map("module_roles")
+}
+
+// Modules
+model SystemModule {
+  id           Int    @id @default(autoincrement())
+  module_owner Int
+  name         String
+  alias        String
+  icon         String
+  description  String @db.Text
+  type_module  String
+  order        Int
+  active       Int    @db.TinyInt
+
+  RoleModule RoleModule[]
+
+  @@map("system_modules")
+}
