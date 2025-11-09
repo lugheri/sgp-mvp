@@ -56,8 +56,11 @@ model AccessProfile {
   description String @db.Text
   active      Int    @db.TinyInt
 
-  RoleProfile RoleProfile[]
-  users       User[]
+  created_at DateTime  @default(now()) @map("created_at")
+  updated_at DateTime? @updatedAt @map("updated_at")
+
+  Role  Role[] @relation("AccessProfileRoles")
+  users User[]
 
   @@map("access_profile")
 }
@@ -69,32 +72,13 @@ model Role {
   description String @db.Text
   active      Int    @db.TinyInt
 
-  RoleModule  RoleModule[]
-  RoleProfile RoleProfile[]
+  created_at DateTime  @default(now()) @map("created_at")
+  updated_at DateTime? @updatedAt @map("updated_at")
+
+  accessProfiles AccessProfile[] @relation("AccessProfileRoles")
+  systemModules  SystemModule[]  @relation("SystemModuleRoles")
 
   @@map("roles")
-}
-
-model RoleProfile {
-  id            Int            @id @default(autoincrement())
-  role_id       String
-  profile_id    Int
-  Role          Role           @relation(fields: [role_id], references: [id])
-  AccessProfile AccessProfile? @relation(fields: [profile_id], references: [id])
-
-  @@map("profile_roles")
-}
-
-model RoleModule {
-  id              Int    @id @default(autoincrement())
-  module_id       Int
-  action_permited String
-  role_id         String
-
-  Role   Role         @relation(fields: [role_id], references: [id])
-  Module SystemModule @relation(fields: [module_id], references: [id])
-
-  @@map("module_roles")
 }
 
 // Modules
@@ -109,7 +93,10 @@ model SystemModule {
   order        Int
   active       Int    @db.TinyInt
 
-  RoleModule RoleModule[]
+  created_at DateTime  @default(now()) @map("created_at")
+  updated_at DateTime? @updatedAt @map("updated_at")
+
+  Role Role[] @relation("SystemModuleRoles")
 
   @@map("system_modules")
 }
