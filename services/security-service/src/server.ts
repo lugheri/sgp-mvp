@@ -3,6 +3,7 @@ import fastify from 'fastify'
 import cors from '@fastify/cors'
 import { ZodError } from 'zod'
 import { env } from './env'
+import { serviceRoutes } from './http/routes/routes'
 
 export const app = fastify()
 
@@ -13,6 +14,8 @@ app.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
   credentials: true, // Permitir credenciais (cookies, cabeçalhos de autorização, etc.)
 })
+
+app.register(serviceRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

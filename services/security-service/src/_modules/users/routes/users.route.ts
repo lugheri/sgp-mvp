@@ -15,7 +15,7 @@ export const routesUsers: {
 }[] = [
   {
     method: 'get',
-    path: '/checkLiveUser',
+    path: '/checkLiveSecurity',
     handler: checkLive,
   },
   { method: 'post', path: '/createUser', handler: createUser },
