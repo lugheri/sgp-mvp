@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const UserDTO = z.object({
   account_id: z.coerce.number(),
   username: z.string(),
-  password: z.string(),
+  password: z.string().optional().default(''),
   user_type: z.enum([
     'operational',
     'supervisor',
@@ -11,7 +11,7 @@ export const UserDTO = z.object({
     'technical',
     'account_manager',
   ]),
-  access_profile: z.coerce.number(),
+  access_profile: z.number().nullable().default(null),
   reset_password: z.coerce.number(),
   active: z.coerce.number(),
 })

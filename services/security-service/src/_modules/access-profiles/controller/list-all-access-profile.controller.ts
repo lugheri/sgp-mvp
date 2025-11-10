@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { AccessProfileUseCaseFactory } from '../factories/access-profile-usecases.factory'
+import { AccessProfileUseCaseFactory } from '../usecases/factories/access-profile-usecases.factory'
 export const listAllAccessProfiles = async (
   request: FastifyRequest,
   reply: FastifyReply,

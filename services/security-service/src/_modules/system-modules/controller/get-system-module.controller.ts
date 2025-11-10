@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { SystemModuleUseCaseFactory } from '../factories/system-module-usecases.factory'
+import { SystemModuleUseCaseFactory } from '../usecases/factories/system-module-usecases.factory'
 import { ResourceNotFoundError } from '@/shared/errors/resource-not-found-error'
 
 export const getSystemModule = async (

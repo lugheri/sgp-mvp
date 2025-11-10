@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { UserInfoDTO } from '../../@dtos/UserInfoDTO'
-import { UserInfoUseCaseFactory } from '../../factories/user-info-usecases.factory'
+import { UserInfoUseCaseFactory } from '../../usecases/factories/user-info-usecases.factory'
 
 export const createUserInfo = async (
   request: FastifyRequest,

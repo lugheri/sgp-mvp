@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { AccountUseCaseFactory } from '../factories/account-usecases.factory'
+import { AccountUseCaseFactory } from '../usecases/factories/account-usecases.factory'
 export const listAllAccounts = async (
   request: FastifyRequest,
   reply: FastifyReply,

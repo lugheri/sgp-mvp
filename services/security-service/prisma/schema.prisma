@@ -22,7 +22,7 @@ model User {
   username       String    @unique
   password       String
   user_type      UserType
-  access_profile Int
+  access_profile Int?
   reset_password Int       @db.TinyInt
   active         Int       @db.TinyInt
   created_at     DateTime  @default(now()) @map("created_at")

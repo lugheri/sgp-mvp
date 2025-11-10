@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { RoleUseCaseFactory } from '../factories/role-usecases.factory'
+import { RoleUseCaseFactory } from '../usecases/factories/role-usecases.factory'
 import { RolePartialDTO } from '../@dtos/RoleDTO'
 export const updateRole = async (
   request: FastifyRequest,
