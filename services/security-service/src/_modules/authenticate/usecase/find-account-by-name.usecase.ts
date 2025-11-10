@@ -1,22 +1,26 @@
 import { IHttpClientService } from '@/infra/interfaces/ihttp-client-service'
 import { AccountType } from '../@dtos/AccountDTO'
+import { InvalidCredentialsError } from '../errors/auth-invalid-credentials-error'
 
 interface Request {
   name: string
 }
 
 interface Response {
-  accountCreated: AccountType | undefined
+  dataAccount: AccountType
 }
 
 export class FindAccountByName {
   constructor(private httpClient: IHttpClientService) {}
 
-  async execute({ name }: Request) {
+  async execute({ name }: Request): Promise<Response> {
     this.httpClient.setInternal(true)
-    const accountCreated = await this.httpClient.get<Response>(
+    const dataAccount = await this.httpClient.get<AccountType>(
       `http://account-service:10001/findByName/${name}`,
     )
-    return { accountCreated }
+    if (!dataAccount) {
+      throw new InvalidCredentialsError()
+    }
+    return { dataAccount }
   }
 }

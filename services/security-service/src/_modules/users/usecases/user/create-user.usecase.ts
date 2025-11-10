@@ -2,6 +2,7 @@ import { UserType } from '../../@dtos/UserDTO'
 import { UserEntity } from '../../entities/User.entity'
 import { UserAlreadyExistsError } from '../../errors/user-already-exists-error'
 import { IUserRepository } from '../../repositories/interfaces/iuser.repository'
+import { hash } from 'bcryptjs'
 
 interface Request {
   dataUser: UserType
@@ -9,6 +10,7 @@ interface Request {
 
 interface Response {
   userCreated: UserEntity
+  provisoryPass: string
 }
 
 export class CreateUserUseCase {
@@ -22,7 +24,20 @@ export class CreateUserUseCase {
     if (userWithSameName) {
       throw new UserAlreadyExistsError()
     }
-    const userCreated = await this.usersRepository.create(dataUser)
-    return { userCreated }
+    const length = 8
+    const characters =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$&'
+    let passwordHash = ''
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length)
+      passwordHash += characters.charAt(randomIndex)
+    }
+    const newPassword = await hash(passwordHash, 6)
+
+    const userCreated = await this.usersRepository.create({
+      ...dataUser,
+      password: newPassword,
+    })
+    return { userCreated, provisoryPass: passwordHash }
   }
 }

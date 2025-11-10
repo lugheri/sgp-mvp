@@ -9,11 +9,12 @@ export const createUser = async (
 ) => {
   try {
     const dataUser = UserDTO.parse(request.body)
-    const { userCreated } = await UserUseCaseFactory.createUser().execute({
-      dataUser,
-    })
+    const { userCreated, provisoryPass } =
+      await UserUseCaseFactory.createUser().execute({
+        dataUser,
+      })
 
-    reply.status(201).send(userCreated)
+    reply.status(201).send({ userCreated, provisoryPass })
   } catch (err) {
     if (err instanceof UserAlreadyExistsError) {
       return reply.status(409).send({ error: true, message: err.message })

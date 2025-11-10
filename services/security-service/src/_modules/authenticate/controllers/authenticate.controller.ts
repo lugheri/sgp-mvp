@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResourceNotFoundError } from '@/shared/errors/resource-not-found-error'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
 import { AuthUseCaseFactory } from '../usecase/factories/auth-usecases.factory'
+import { InvalidCredentialsError } from '../errors/auth-invalid-credentials-error'
+import { UserUseCaseFactory } from '@/_modules/users/usecases/factories/user-usecases.factory'
+import { compare } from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export const authenticate = async (
   request: FastifyRequest,
@@ -14,19 +17,37 @@ export const authenticate = async (
       password: z.string().min(6),
     })
     const { username, password } = params.parse(request.body)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_user, tenant] = username.split('@')
 
-    console.log(password, _user, tenant)
-
-    const { accountCreated } =
+    const { dataAccount } =
       await AuthUseCaseFactory.findAccountByName().execute({
         name: tenant,
       })
 
-    // reply.send({ token, userdata })
-    reply.send(accountCreated)
+    const account_id = dataAccount.id || 0
+    // Check UserData
+    const { user } = await UserUseCaseFactory.findByUsernameUser().execute({
+      account_id,
+      username,
+    })
+    if (!user) {
+      throw new InvalidCredentialsError()
+    }
+    const doesPasswordMatches = await compare(password, user.password)
+    if (!doesPasswordMatches) {
+      throw new InvalidCredentialsError()
+    }
+
+    const token = jwt.sign(
+      { sign: { sub: user.id } },
+      process.env.APP_SECRET as string,
+      { expiresIn: '12h' },
+    )
+
+    reply.send({ token, user })
   } catch (error: any) {
-    if (error instanceof ResourceNotFoundError) {
+    if (error instanceof InvalidCredentialsError) {
       return reply.status(400).send({ message: error.message })
     }
     if (error.response) {

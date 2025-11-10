@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const AccountDTO = z.object({
+  id: z.number().optional(),
   account_owner: z.number(),
   account_name: z.string(),
   company_name: z.string(),

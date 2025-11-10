@@ -120,6 +120,7 @@ services:
       # App
       APP_SECRET: ${APP_SECRET:-change-me}
       JWT_SECRET: ${JWT_SECRET:-change-me}
+      INTERNAL_SERVICE_TOKEN: BEARER:bV9hbKAq4R4zjHSzk
       UPDATE: '1'
     ports:
       - "10001:10001"
@@ -166,7 +167,8 @@ services:
       # App
       APP_SECRET: ${APP_SECRET:-change-me}
       JWT_SECRET: ${JWT_SECRET:-change-me}
-      UPDATE: '1'
+      INTERNAL_SERVICE_TOKEN: BEARER:bV9hbKAq4R4zjHSzk
+      UPDATE: '3'
     ports:
       - "10002:10002"
     volumes:
