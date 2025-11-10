@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { AccessProfileDTO } from '../@dtos/AccessProfileDTO'
-import { AccessProfileUseCaseFactory } from '../factories/access-profile-usecases.factory'
+import { AccessProfileUseCaseFactory } from '../usecases/factories/access-profile-usecases.factory'
 import { AccessProfileAlreadyExistsError } from '../errors/access-profile-already-exists-error'
 
 export const createAccessProfile = async (

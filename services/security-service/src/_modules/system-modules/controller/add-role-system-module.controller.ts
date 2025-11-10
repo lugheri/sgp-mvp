@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { SystemModuleUseCaseFactory } from '../factories/system-module-usecases.factory'
+import { SystemModuleUseCaseFactory } from '../usecases/factories/system-module-usecases.factory'
 
 export const addRoleSystemModule = async (
   request: FastifyRequest,

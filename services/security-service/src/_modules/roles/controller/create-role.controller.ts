@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RoleDTO } from '../@dtos/RoleDTO'
-import { RoleUseCaseFactory } from '../factories/role-usecases.factory'
+import { RoleUseCaseFactory } from '../usecases/factories/role-usecases.factory'
 import { RoleAlreadyExistsError } from '../errors/role-already-exists-error'
 
 export const createRole = async (

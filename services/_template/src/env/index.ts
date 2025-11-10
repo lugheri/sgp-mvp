@@ -10,6 +10,7 @@ const envSchema = z.object({
   REDIS_PORT: z.coerce.number(),
   REDIS_PASS: z.string(),
   APP_SECRET: z.string().default('sgp_dev_jwt_flux'),
+  INTERNAL_SERVICE_TOKEN: z.string(),
 })
 const _env = envSchema.safeParse(process.env)
 

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
 import { TemplatePartialDTO } from '../@dtos/TemplateDTO'
-import { TemplateUseCaseFactory } from '../factories/template-usecases.factory'
+import { TemplateUseCaseFactory } from '../usecases/factories/template-usecases.factory'
 export const updateTemplate = async (
   request: FastifyRequest,
   reply: FastifyReply,

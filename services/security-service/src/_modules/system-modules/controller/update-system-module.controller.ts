@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { SystemModuleUseCaseFactory } from '../factories/system-module-usecases.factory'
+import { SystemModuleUseCaseFactory } from '../usecases/factories/system-module-usecases.factory'
 import { SystemModulePartialDTO } from '../@dtos/SystemModuleDTO'
 export const updateSystemModule = async (
   request: FastifyRequest,

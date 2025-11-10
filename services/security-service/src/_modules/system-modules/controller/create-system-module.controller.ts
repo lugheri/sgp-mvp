@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { SystemModuleDTO } from '../@dtos/SystemModuleDTO'
-import { SystemModuleUseCaseFactory } from '../factories/system-module-usecases.factory'
+import { SystemModuleUseCaseFactory } from '../usecases/factories/system-module-usecases.factory'
 import { SystemModuleAlreadyExistsError } from '../errors/system-module-already-exists-error'
 
 export const createSystemModule = async (

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { TemplateDTO } from '../@dtos/TemplateDTO'
-import { TemplateUseCaseFactory } from '../factories/template-usecases.factory'
+import { TemplateUseCaseFactory } from '../usecases/factories/template-usecases.factory'
 import { TemplateAlreadyExistsError } from '../errors/template-already-exists-error'
 
 export const createTemplate = async (

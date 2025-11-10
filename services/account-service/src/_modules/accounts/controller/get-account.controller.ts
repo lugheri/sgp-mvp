@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { AccountUseCaseFactory } from '../factories/account-usecases.factory'
+import { AccountUseCaseFactory } from '../usecases/factories/account-usecases.factory'
 import { ResourceNotFoundError } from '@/shared/errors/resource-not-found-error'
 
 export const getAccount = async (

@@ -85,6 +85,31 @@ export class RedisCacheRepository implements ICacheRepository {
     }
   }
 
+  async getOrSetWithNull(
+    key: string,
+    fallback: () => Promise<string | null>,
+    expire?: number,
+  ): Promise<string | null> {
+    try {
+      const cached = await this.get(key)
+      if (cached) return cached
+
+      const value = await fallback()
+
+      if (value === null) {
+        await this.set(key, '__NULL__', expire)
+        return null
+      }
+
+      await this.set(key, value, expire)
+      return value
+    } catch (e) {
+      console.error('Redis GetOrSetWithNull  Error', e)
+      const value = await fallback()
+      return value
+    }
+  }
+
   async getAndDelete(key: string): Promise<string | null> {
     try {
       const value = await redis.getdel(key)

@@ -1,13 +1,13 @@
 import { RedisCacheRepository } from '@/infra/cache/redis-cache-repository'
-import { PrismaRoleRepository } from '../repositories/implementations/prisma-role.repository'
-import { CreateRoleUseCase } from '../usecases/create-role.usecase'
+import { PrismaRoleRepository } from '../../repositories/implementations/prisma-role.repository'
+import { CreateRoleUseCase } from '../create-role.usecase'
 import { PrismaClient } from '@prisma/client'
-import { GetRoleUseCase } from '../usecases/get-role.usecase'
-import { ListAllRolesUseCase } from '../usecases/list-all-roles.usecase'
-import { DeleteRoleUseCase } from '../usecases/delete-role.usecase'
-import { ListRolesUseCase } from '../usecases/list-roles.usecase'
-import { UpdateRoleUseCase } from '../usecases/update-role.usecase'
-import { FindByNameRoleUseCase } from '../usecases/find-by-name-role.usecase'
+import { GetRoleUseCase } from '../get-role.usecase'
+import { ListAllRolesUseCase } from '../list-all-roles.usecase'
+import { DeleteRoleUseCase } from '../delete-role.usecase'
+import { ListRolesUseCase } from '../list-roles.usecase'
+import { UpdateRoleUseCase } from '../update-role.usecase'
+import { FindByNameRoleUseCase } from '../find-by-name-role.usecase'
 
 const cacheRepository = new RedisCacheRepository()
 const prismaClient = new PrismaClient()

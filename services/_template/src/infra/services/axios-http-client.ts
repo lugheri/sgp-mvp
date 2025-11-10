@@ -6,6 +6,7 @@ import { IHttpClientService } from '../interfaces/ihttp-client-service'
 export class AxiosHttpClient implements IHttpClientService {
   private axiosInstance: AxiosInstance
   private token?: string
+  private internal: boolean = false
 
   constructor(baseURL: string) {
     this.axiosInstance = axios.create({ baseURL })
@@ -13,6 +14,9 @@ export class AxiosHttpClient implements IHttpClientService {
     this.axiosInstance.interceptors.request.use(
       (config) => {
         // Exemplo: Adicionar headers dinâmicos
+        if (this.internal) {
+          config.headers.Authorization = 'Internal-service'
+        }
         if (this.token) {
           config.headers.Authorization = this.token
         }
@@ -38,6 +42,10 @@ export class AxiosHttpClient implements IHttpClientService {
 
   setToken(token: string): void {
     this.token = token
+  }
+
+  setInternal(internal: boolean): void {
+    this.internal = internal
   }
 
   private handleError(err: any, url: string): void {

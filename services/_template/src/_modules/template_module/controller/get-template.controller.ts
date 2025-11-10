@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { TemplateUseCaseFactory } from '../factories/template-usecases.factory'
+import { TemplateUseCaseFactory } from '../usecases/factories/template-usecases.factory'
 import { ResourceNotFoundError } from '@/shared/errors/resource-not-found-error'
 
 export const getTemplate = async (

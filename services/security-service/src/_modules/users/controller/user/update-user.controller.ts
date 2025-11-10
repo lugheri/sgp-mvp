@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { UserUseCaseFactory } from '../../factories/user-usecases.factory'
+import { UserUseCaseFactory } from '../../usecases/factories/user-usecases.factory'
 import { UserPartialDTO } from '../../@dtos/UserDTO'
 export const updateUser = async (
   request: FastifyRequest,

@@ -1,4 +1,35 @@
 services:
+  traefik:
+    image: traefik:v2.10
+    container_name: sgp-traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"       # HTTP
+      - "443:443"     # HTTPS
+      - "8080:8080"   # Dashboard
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=sgp-network"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--log.level=INFO"
+      - "--accesslog.filepath=/var/log/traefik/access.log"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/logs:/var/log/traefik
+      # - ./traefik/letsencrypt:/letsencrypt  # SSL certificates
+    networks:
+      - sgp-network
+    labels:
+      - "traefik.enable=true"
+      ## Dashboard
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=web"
   # Database MySQL
   database:
     image: mysql:8.0-oracle
@@ -67,10 +98,9 @@ services:
 
   # Account Service
   account-service:
-    build:
-      context: ./services/account-service
-      dockerfile: Dockerfile
+    image: node:18
     container_name: sgp-account-service
+    command:  sh -c "./start.sh"
     depends_on:
       database:
         condition: service_healthy
@@ -86,38 +116,81 @@ services:
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-password}      
       # Database
-      DATABASE_URL: mysql://${DB_USER:-user}:${DB_PASSWORD:-password}@database:3306/${DB_NAME:-accounts}      
+      DATABASE_URL: mysql://${DB_USER:-user}:${DB_PASSWORD:-password}@database:3306/${DB_NAME_ACCOUNT:-accounts}      
       # App
       APP_SECRET: ${APP_SECRET:-change-me}
       JWT_SECRET: ${JWT_SECRET:-change-me}
+      UPDATE: '1'
     ports:
       - "10001:10001"
     volumes:
-      - ./services/account-service:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/build  # ← Protege também a pasta build
-    working_dir: /usr/src/app
+      - ./services/account-service:/app
+      #- /usr/src/app/node_modules
+      #- /usr/src/app/build  # ← Protege também a pasta build
+    working_dir: /app
     networks:
       - sgp-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:10001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1g"
-        reservations:
-          cpus: "0.5"
-          memory: "512M"
-    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # HTTP Router
+      - "traefik.http.routers.account.rule=Host(`api.localhost`) && PathPrefix(`/api/accounts`)"
+      - "traefik.http.routers.account.entrypoints=web"
+      - "traefik.http.routers.account.service=account"
+      # Middleware - Strip prefix
+      - "traefik.http.middlewares.account-strip.stripprefix.prefixes=/api/accounts"
+      - "traefik.http.routers.account.middlewares=account-strip"
+      # Service
+      - "traefik.http.services.account.loadbalancer.server.port=10001"
+    mem_limit: 1g
+
+  security-service:
+    image: node:18
+    container_name: sgp-security-service
+    command:  sh -c "./start.sh"
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      TZ: America/Sao_Paulo
+      SERVICE_PORT: ${SECURITY_SERVICE_PORT:-10002}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      NODE_ENV: ${NODE_ENV:-development}      
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-password}      
+      # Database
+      DATABASE_URL: mysql://${DB_USER:-user}:${DB_PASSWORD:-password}@database:3306/${DB_NAME_SECURITY:-security}      
+      # App
+      APP_SECRET: ${APP_SECRET:-change-me}
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      UPDATE: '1'
+    ports:
+      - "10002:10002"
+    volumes:
+      - ./services/security-service:/app
+    working_dir: /app
+    networks:
+      - sgp-network
+    labels:
+      - "traefik.enable=true"
+      # HTTP Router
+      - "traefik.http.routers.security.rule=Host(`api.localhost`) && PathPrefix(`/api/security`)"
+      - "traefik.http.routers.security.entrypoints=web"
+      - "traefik.http.routers.security.service=security"
+      # Middleware - Strip prefix
+      - "traefik.http.middlewares.security-strip.stripprefix.prefixes=/api/security"
+      - "traefik.http.routers.security.middlewares=security-strip"
+      # Service
+      - "traefik.http.services.security.loadbalancer.server.port=10002"
+    mem_limit: 1g
 
 networks:
   sgp-network:
     driver: bridge
+    
 
 volumes:
   mysql_data:

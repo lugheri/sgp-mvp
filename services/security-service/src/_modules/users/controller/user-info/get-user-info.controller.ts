@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
 import { ResourceNotFoundError } from '@/shared/errors/resource-not-found-error'
-import { UserInfoUseCaseFactory } from '../../factories/user-info-usecases.factory'
+import { UserInfoUseCaseFactory } from '../../usecases/factories/user-info-usecases.factory'
 
 export const getUserInfo = async (
   request: FastifyRequest,

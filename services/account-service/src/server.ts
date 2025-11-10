@@ -5,7 +5,9 @@ import { serviceRoutes } from './http/routes'
 import { ZodError } from 'zod'
 import { env } from './env'
 // A C C O U N T   -   S E R V I C E
-export const app = fastify()
+export const app = fastify({
+  logger: env.ENVIRONMENT === 'test',
+})
 app.register(cors, {
   // Configurações CORS aqui
   origin: '*', // Permitir solicitações de qualquer origem (ou especifique a origem desejada)
@@ -14,7 +16,16 @@ app.register(cors, {
   credentials: true, // Permitir credenciais (cookies, cabeçalhos de autorização, etc.)
 })
 
-app.register(serviceRoutes)
+// app.register(serviceRoutes)
+serviceRoutes(app)
+  .then(() => {
+    console.log('✅ Routes registered successfully!')
+  })
+  .catch((err) => {
+    console.error('❌ Error registering routes:', err)
+    process.exit(1)
+  })
+
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
     return reply
@@ -26,6 +37,7 @@ app.setErrorHandler((error, _, reply) => {
     console.error(error)
   } else {
     // Log external tool
+    console.error(error)
   }
   return reply.status(500).send({ message: 'Internal server error.' })
 })
@@ -36,5 +48,9 @@ app
     port: env.SERVICE_PORT,
   })
   .then(() => {
-    console.log(`[account-service] 🚀 Running at port :${env.SERVICE_PORT}`)
+    console.log(`SGP [account-service] 🚀 Running at port  ${env.SERVICE_PORT}`)
+  })
+  .catch((err) => {
+    console.error('SGP [account-service] ❌ Failed to start:', err)
+    process.exit(1)
   })

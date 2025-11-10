@@ -1,10 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ICacheRepository {
   // String Methods
   get(key: string): Promise<string | null>
   set(key: string, value: string, expire?: number): Promise<boolean>
-  setMultiple(keysValues: { key: string; value: string; expire?: number }[]): Promise<boolean>
+  setMultiple(
+    keysValues: { key: string; value: string; expire?: number }[],
+  ): Promise<boolean>
   setIfNotExists(key: string, value: string, expire?: number): Promise<boolean>
-  getOrSet(key: string, fallback: () => Promise<string>, expire?: number): Promise<string>
+  getOrSet(
+    key: string,
+    fallback: () => Promise<string>,
+    expire?: number,
+  ): Promise<string>
+  getOrSetWithNull(
+    key: string,
+    fallback: () => Promise<string | null>,
+    expire?: number,
+  ): Promise<string | null>
   getAndDelete(key: string): Promise<string | null>
   append(key: string, value: string): Promise<number>
 
@@ -26,7 +38,11 @@ export interface ICacheRepository {
   decrement(key: string, amount?: number): Promise<number>
 
   // List Methods
-  insertList(key: string, value: string[], method: 'lpush' | 'rpush'): Promise<boolean>
+  insertList(
+    key: string,
+    value: string[],
+    method: 'lpush' | 'rpush',
+  ): Promise<boolean>
   getList(key: string, start: number, stop: number): Promise<string[]>
   totalList(key: string): Promise<number>
   removeItemList(key: string, method: 'rpop' | 'lpop'): Promise<string | null>

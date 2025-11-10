@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
-import { RoleUseCaseFactory } from '../factories/role-usecases.factory'
+import { RoleUseCaseFactory } from '../usecases/factories/role-usecases.factory'
 export const listAllRoles = async (
   request: FastifyRequest,
   reply: FastifyReply,

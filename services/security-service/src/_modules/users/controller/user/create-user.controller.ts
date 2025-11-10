@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { UserDTO } from '../../@dtos/UserDTO'
-import { UserUseCaseFactory } from '../../factories/user-usecases.factory'
+import { UserUseCaseFactory } from '../../usecases/factories/user-usecases.factory'
 import { UserAlreadyExistsError } from '../../errors/user-already-exists-error'
 
 export const createUser = async (

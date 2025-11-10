@@ -1,13 +1,13 @@
 import { RedisCacheRepository } from '@/infra/cache/redis-cache-repository'
-import { PrismaUserRepository } from '../repositories/implementations/prisma-user.repository'
-import { CreateUserUseCase } from '../usecases/user/create-user.usecase'
+import { PrismaUserRepository } from '../../repositories/implementations/prisma-user.repository'
+import { CreateUserUseCase } from '../user/create-user.usecase'
 import { PrismaClient } from '@prisma/client'
-import { GetUserUseCase } from '../usecases/user/get-user.usecase'
-import { ListAllUsersUseCase } from '../usecases/user/list-all-users.usecase'
-import { DeleteUserUseCase } from '../usecases/user/delete-user.usecase'
-import { ListUsersUseCase } from '../usecases/user/list-users.usecase'
-import { UpdateUserUseCase } from '../usecases/user/update-user.usecase'
-import { FindByUsernameUserUseCase } from '../usecases/user/find-by-username-user.usecase'
+import { GetUserUseCase } from '../user/get-user.usecase'
+import { ListAllUsersUseCase } from '../user/list-all-users.usecase'
+import { DeleteUserUseCase } from '../user/delete-user.usecase'
+import { ListUsersUseCase } from '../user/list-users.usecase'
+import { UpdateUserUseCase } from '../user/update-user.usecase'
+import { FindByUsernameUserUseCase } from '../user/find-by-username-user.usecase'
 
 const cacheRepository = new RedisCacheRepository()
 const prismaClient = new PrismaClient()

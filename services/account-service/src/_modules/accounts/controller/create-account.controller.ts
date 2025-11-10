@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { AccountDTO } from '../@dtos/AccountDTO'
-import { AccountUseCaseFactory } from '../factories/account-usecases.factory'
 import { AccountAlreadyExistsError } from '../errors/account-already-exists-error'
+import { AccountUseCaseFactory } from '../usecases/factories/account-usecases.factory'
 
 export const createAccount = async (
   request: FastifyRequest,
